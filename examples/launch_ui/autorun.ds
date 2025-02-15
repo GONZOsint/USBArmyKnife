@@ -1,0 +1,92 @@
+REM ===================================================================
+REM UAK - AZUREUS Kit Payload Selector
+REM 
+REM To add more files to the UI:
+REM 1. Define the new payload at the top using DEFINE, e.g.:
+REM      DEFINE #PAYLOAD_8 new_payload.ds
+REM 2. Increase the total payload count in the WHILE condition.
+REM 3. Add a new ELSE IF block in the display section to show the new payload.
+REM 4. Add a corresponding ELSE IF block in the execution section to run the new payload.
+REM ===================================================================
+
+DISPLAY_PNG /azureus.png
+DELAY 2000
+DISPLAY_CLEAR
+
+VAR $FILE_INDEX = 0
+DEFINE #PAYLOAD_1 initial_payload.ds
+DEFINE #PAYLOAD_2 evilap.ds
+DEFINE #PAYLOAD_3 wifi_deauth_and_crypt_capture.ds
+DEFINE #PAYLOAD_4 usb_ethernet_pcap.ds
+DEFINE #PAYLOAD_5 progressbar.ds
+DEFINE #PAYLOAD_6 banner.ds
+DEFINE #PAYLOAD_7 frog.ds
+
+LED_B
+
+WHILE ( $FILE_INDEX < 7 )
+  DISPLAY_CLEAR
+
+  DISPLAY_TEXT 0 3  UAK - AZUREUS Kit
+  DISPLAY_TEXT 0 15   - Payloads loaded: 7
+  DISPLAY_TEXT 0 30   - Select a payload:
+
+  IF ( $FILE_INDEX == 0 )
+    DISPLAY_TEXT 0 45 -> 1/7 - #PAYLOAD_1
+  ELSE IF ( $FILE_INDEX == 1 )
+    DISPLAY_TEXT 0 45 -> 2/7 - #PAYLOAD_2
+  ELSE IF ( $FILE_INDEX == 2 )
+    DISPLAY_TEXT 0 45 -> 3/7 - #PAYLOAD_3
+  ELSE IF ( $FILE_INDEX == 3 )
+    DISPLAY_TEXT 0 45 -> 4/7 - #PAYLOAD_4 (Enable NCM mode)
+  ELSE IF ( $FILE_INDEX == 4 )
+    DISPLAY_TEXT 0 45 -> 5/7 - #PAYLOAD_5
+  ELSE IF ( $FILE_INDEX == 5 )
+    DISPLAY_TEXT 0 45 -> 6/7 - #PAYLOAD_6
+  ELSE IF ( $FILE_INDEX == 6 )
+    DISPLAY_TEXT 0 45 -> 7/7 - #PAYLOAD_7
+  END_IF
+
+  DISPLAY_TEXT 0 70 [Short=Next] | [Hold=Run]
+
+  WAIT_FOR_BUTTON_PRESS
+
+  IF ( BUTTON_SHORT_PRESS() )
+    LED 0 255 0
+    DELAY 150
+    LED_B
+    $FILE_INDEX = ( $FILE_INDEX + 1 )
+  ELSE IF ( BUTTON_LONG_PRESS() )
+    DISPLAY_CLEAR
+    DISPLAY_TEXT 0 30 Starting...
+    LED 255 0 0
+    DELAY 500
+
+    IF ( $FILE_INDEX == 0 )
+      DISPLAY_TEXT 0 50 Running initial_payload.ds
+      RUN_PAYLOAD /#PAYLOAD_1
+    ELSE IF ( $FILE_INDEX == 1 )
+      DISPLAY_TEXT 0 50 Running evilap.ds
+      RUN_PAYLOAD /#PAYLOAD_2
+    ELSE IF ( $FILE_INDEX == 2 )
+      DISPLAY_TEXT 0 50 Running wifi_deauth_and_crypt_capture.ds
+      RUN_PAYLOAD /#PAYLOAD_3
+    ELSE IF ( $FILE_INDEX == 3 )
+      DISPLAY_TEXT 0 50 Running usb_ethernet_pcap.ds
+      RUN_PAYLOAD /#PAYLOAD_4
+    ELSE IF ( $FILE_INDEX == 4 )
+      DISPLAY_TEXT 0 50 Running progressbar.ds
+      RUN_PAYLOAD /#PAYLOAD_5
+    ELSE IF ( $FILE_INDEX == 5 )
+      DISPLAY_TEXT 0 50 Running banner.ds
+      RUN_PAYLOAD /#PAYLOAD_6
+    ELSE IF ( $FILE_INDEX == 6 )
+      DISPLAY_TEXT 0 50 Running frog.ds
+      RUN_PAYLOAD /#PAYLOAD_7
+    END_IF
+
+    LED_B
+  END_IF
+END_WHILE
+
+RESTART_PAYLOAD
