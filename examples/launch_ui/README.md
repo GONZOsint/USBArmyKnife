@@ -1,6 +1,6 @@
-# UAK - AZUREUS Kit Payload Selector
+# Example - Payload Selector
 
-This script provides a user interface for selecting and executing one of several payloads using the UAK - AZUREUS Kit. It displays an image, a menu of payload options, and allows you to cycle through them using button presses.
+This script provides a user interface for selecting and executing one of several payloads. It displays an image, a menu of payload options, and allows you to cycle through them using button presses.
 
 ## Features
 
